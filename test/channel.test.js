@@ -12,12 +12,15 @@ describe('Channel', function () {
 	var connMock = mock();
 	connMock.expect('createChannel', function () { return when.delay(10).yield(chanMock); });
 	connMock.expect('close', function () { return when.delay(10).yield(this); });
+	connMock.expect('whenConnected', function (cb) { when.delay(10).then(cb); });
+	connMock.location = 'conn.channel.test.js';
 	
 	var chanMock = mock();
 	chanMock.expect('assertExchange', function () { return when.delay(10); });
 	chanMock.expect('assertQueue', function (name) { return when.delay(10).yield(name || 'foo'); });
 	chanMock.expect('bindQueue', function () { return when.delay(10); });
 	chanMock.expect('close', function () { return when.delay(10).yield(this); });
+	chanMock.location = 'chan.channel.test.js';
 	
 	var Channel = ArchEnemy.Channel,
 		chan = new Channel({
@@ -28,10 +31,11 @@ describe('Channel', function () {
 			}
 		});
 	
-	it('should emit "connect" event', function (done) {
+	it('should emit "connected" event', function (done) {
 		chan.once('connected', done);
 		chan.connect();
 	});
+	
 	it('should not try to connect if already connected', function (done) {
 		chanMock.expect('connect', function () {
 			throw new Error();

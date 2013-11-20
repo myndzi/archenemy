@@ -9,14 +9,26 @@ var mock = require('./mock'),
 when.delay = require('when/delay');
 
 describe('Connection', function () {
+	var chanMock = new mock();
+	chanMock.expect('assertExchange', function () { return when.delay(10); });
+	chanMock.expect('assertQueue', function (name) { return when.delay(10).yield(name || 'foo'); });
+	chanMock.expect('bindQueue', function () { return when.delay(10); });
+	chanMock.expect('close', function () { return when.delay(10).yield(this); });
+	chanMock.expect('consume', function () { });
+	chanMock.expect('publish', function () { });
+	chanMock.expect('connect', function () { return when.delay(10).yield(this); });
+	chanMock.location = 'chan.client.test.js';
+
 	var amqpMock = mock();
 	amqpMock.expect('connect', function () { return when.delay(10).yield(this); });
 	amqpMock.expect('close', function () { return when.delay(10).yield(this); });
+	amqpMock.expect('createChannel', function () { return when.delay(10).yield(chanMock); });
+	amqpMock.location = 'amqp.connection.test.js';
 	
 	var Connection = ArchEnemy.Connection,
 		conn = new Connection({amqp: amqpMock});
 	
-	it('should emit "connect" event', function (done) {
+	it('should emit "connected" event', function (done) {
 		conn.once('connected', done);
 		conn.connect();
 	});
