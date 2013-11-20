@@ -1,6 +1,6 @@
 'use strict';
 
-var util = require('../lib/util'),
+var util = require('../lib/common'),
 	assert = require('assert'),
 	should = require('should');
 

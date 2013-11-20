@@ -1,5 +1,6 @@
 'use strict';
-var EventEmitter = require('events').EventEmitter;
+var EventEmitter = require('events').EventEmitter,
+	util = require('util');
 
 process.on('exit', function () {
 	mocks.forEach(function (mock) {
@@ -11,28 +12,32 @@ process.on('exit', function () {
 });
 var mocks = [];
 
-module.exports = function () {
-	var ee = new EventEmitter();
+module.exports = Mock;
 
-	ee.mocks = { };
-	ee.expect = function (calls, method, cb) {
-		if (typeof method === 'function') {
-			cb = method;
-			method = calls;
-			calls = null;
-		}
-		
-		if (this[method]) {
-			this.mocks[method] = (this.mocks[method] || []).concat(this[method]);
-		}
-		
-		this[method] = mockFn(calls, cb, this, arguments);
-	};
-	ee.unexpect = function (method) {
-		if (this.mocks[method] && this.mocks[method].length)
-			this[method] = this.mocks[method].pop();
-	};
-	return ee;
+function Mock() {
+	if (!(this instanceof Mock)) return new Mock();
+	
+	EventEmitter.call(this);
+	this.mocks = { };
+}
+util.inherits(Mock, EventEmitter);
+
+Mock.prototype.expect = function (calls, method, cb) {
+	if (typeof method === 'function') {
+		cb = method;
+		method = calls;
+		calls = null;
+	}
+
+	if (this[method]) {
+		this.mocks[method] = (this.mocks[method] || []).concat(this[method]);
+	}
+
+	this[method] = mockFn(calls, cb, this, arguments);
+};
+Mock.prototype.unexpect = function (method) {
+	if (this.mocks[method] && this.mocks[method].length)
+		this[method] = this.mocks[method].pop();
 };
 
 function mockFn(expected, fn, thisArg, args) {

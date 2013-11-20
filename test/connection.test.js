@@ -48,5 +48,15 @@ describe('Connection', function () {
 	it('should have proxy methods', function () {
 		conn.proxies.length.should.be.above(0);
 	});
+	it('should disconnect proxies when disconnected', function () {
+		conn.proxies[0].isConnected().should.equal(false);
+	});
+	it('should connect proxies when connected', function (done) {
+		conn.once('connected', function () {
+			conn.proxies[0].isConnected().should.equal(true);
+			done();
+		});
+		conn.connect();
+	});
 });
 
