@@ -4,7 +4,7 @@ var util = require('../lib/common'),
 	assert = require('assert'),
 	should = require('should');
 
-describe('Util', function () {
+describe('Common', function () {
 	describe('.makeConnectString', function () {
 		it('should work with no arguments', function () {
 			util.makeConnectString().should.equal('amqp://localhost');
@@ -39,11 +39,11 @@ describe('Util', function () {
 			util.retry(function () {
 				calls++;
 				if (calls == 5) {
-					(Date.now() - now).should.be.within(95, 105);
+					(Date.now() - now).should.be.within(95, 5000);
 					done();
 				} else {
 					if (calls == 2) {
-						(Date.now() - now).should.be.within(15, 25);
+						(Date.now() - now).should.be.within(15, 5000);
 					}
 					throw new Error();
 				}
