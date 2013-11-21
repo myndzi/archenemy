@@ -40,7 +40,7 @@ describe('Client', function () {
 				Connection: function () { return connMock },
 				connection: { amqp: amqpMock }
 			});
-			chanMock.expect(chanMock, 'publish', done);
+			chanMock.expect(chanMock, 'publish', done.bind(null, null));
 		});
 		it('should return a promise resolved with a Channel instance', function (done) {
 			client.consume(cb)
@@ -68,7 +68,7 @@ describe('Client', function () {
 	});
 	describe('#send', function () {
 		it('should call Channel.publish', function (done) {
-			chanMock.expect('publish', done);
+			chanMock.expect('publish', done.bind(null, null));
 			client.send('foo', 'data');
 		});
 	});
