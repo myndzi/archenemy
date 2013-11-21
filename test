@@ -1,0 +1,2 @@
+#! /bin/bash
+node tests/run.js -p ./tests $@

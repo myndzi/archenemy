@@ -1,26 +1,25 @@
 {
-  "name": "arch",
-  "version": "0.0.0",
+  "name": "ArchEnemy",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./test"
   },
-  "author": "",
+  "author": "Kris Reeves",
   "license": "BSD-2-Clause",
   "dependencies": {
     "amqplib": "~0.1.0",
     "when": "~2.6.0",
     "jquery-extend": "~2.0.3",
-    "lru-cache": "~2.3.1",
-    "uuid-v4": "~0.1.0",
     "msgpack": "~0.2.1",
     "thisid": "git+https://github.com/myndzi/thisid",
-    "functionbuffer": "git+https://github.com/myndzi/functionbuffer",
-    "logger": "git+https://github.com/myndzi/logger.git",
+    "logger": "git+https://github.com/myndzi/logger.git"
+  },
+  "devDependencies": {
     "mocha": "git+https://github.com/myndzi/mocha.git",
     "should": "~2.1.0",
-    "sinon": "~1.7.3",
-    "gently": "~0.9.2"
+    "queuedproxy": "git+https://github.com/myndzi/queuedproxy.git",
+    "optimist": "~0.6.0"
   }
 }

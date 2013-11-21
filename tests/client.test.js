@@ -72,7 +72,7 @@ describe('Client', function () {
 			client.send('foo', 'data');
 		});
 	});
-	describe('#clientinfo', function () {
+	describe('#clientInfo', function () {
 		it('should work', function () {
 			client.clientInfo().should.be.ok;
 		});
