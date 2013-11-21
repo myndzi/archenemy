@@ -11,6 +11,21 @@ argv = require('optimist')
 	.default('path', '.')
 	.argv;
 
+var files = [];
+argv._.forEach(function (file) {
+	var fn = path.join(argv.path, file + argv.extension);
+	if (fs.existsSync(fn)) files.push(fn);
+});
+if (!files.length) {
+	argv.reporter = 'dot';
+	fs.readdirSync(argv.path)
+	.filter(function (a) { return /.test.js$/.test(a); })
+	.forEach(function (file) {
+		var fn = path.join(argv.path, file);
+		files.push(fn);
+	});
+}
+
 var mocha = new Mocha({
 	ui: 'bdd',
 	reporter: argv.reporter
@@ -27,20 +42,6 @@ var reporters = ['list', 'spec', 'dot'], a;
 		} catch (e) { }
 	}
 })();
-
-var files = [];
-argv._.forEach(function (file) {
-	var fn = path.join(argv.path, file + argv.extension);
-	if (fs.existsSync(fn)) files.push(fn);
-});
-if (!files.length) {
-	fs.readdirSync(argv.path)
-	.filter(function (a) { return /.test.js$/.test(a); })
-	.forEach(function (file) {
-		var fn = path.join(argv.path, file);
-		files.push(fn);
-	});
-}
 
 files.forEach(function (file) { mocha.addFile(file); });
 
