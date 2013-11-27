@@ -33,9 +33,11 @@ describe('Integration tests', function () {
 			'keke': [ 'keke' ]
 		}, function (msg) {
 			msg.should.equal('success');
-			client.close().then(done.bind(null, null));
 		});
 
+		setTimeout(function () {
+			client.close().then(done.bind(null, null));
+		}, 1500);
 		client.send('foo', 'message');
 	});
 });
