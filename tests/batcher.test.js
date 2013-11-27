@@ -4,7 +4,11 @@ var when = require('when'),
 	assert = require('assert'),
 	should = require('should'),
 	ArchEnemy = require('..'),
-	Batcher = ArchEnemy.Batcher;
+	Batcher = ArchEnemy.Batcher,
+	Logger = require('logger');
+
+var log = new Logger('Batcher', 'error')
+Batcher.defaults.log = log;
 
 describe('Batcher', function () {
 	it('should throw if no function specified', function () {
@@ -16,6 +20,7 @@ describe('Batcher', function () {
 		var batcher = new Batcher(function () {
 			throw new Error('foo');
 		}, { timeout: 0 });
+
 		batcher.on('error', done.bind(null, null));
 		batcher.add();
 	});
